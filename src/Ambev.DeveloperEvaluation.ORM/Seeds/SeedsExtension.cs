@@ -1,4 +1,5 @@
-﻿using Ambev.DeveloperEvaluation.ORM.Seeds.Products;
+﻿using Ambev.DeveloperEvaluation.ORM.Seeds.Branches;
+using Ambev.DeveloperEvaluation.ORM.Seeds.Products;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +21,7 @@ namespace Ambev.DeveloperEvaluation.ORM.Seeds
         public static IServiceCollection AddSeedsConfiguration(this IServiceCollection services)
         {
             services.AddTransient<IProductSeeder, ProductSeeder>();
+            services.AddTransient<IBranchSeeder, BranchSeeder>();
 
             return services;
         }
@@ -38,6 +40,23 @@ namespace Ambev.DeveloperEvaluation.ORM.Seeds
                 using var scope = app.ApplicationServices.CreateScope();
                 var seeder = scope.ServiceProvider.GetRequiredService<IProductSeeder>();
                 await seeder.SeedAsync(40);
+            }
+        }
+
+        /// <summary>
+        /// Seeds product data if enabled in the configuration.
+        /// </summary>
+        /// <param name="app"></param>
+        /// <returns></returns>
+        public static async Task SeedBranchIfEnabledAsync(this IApplicationBuilder app)
+        {
+            var config = app.ApplicationServices.GetRequiredService<IConfiguration>();
+
+            if (config.GetValue<bool>("SeedBranchData"))
+            {
+                using var scope = app.ApplicationServices.CreateScope();
+                var seeder = scope.ServiceProvider.GetRequiredService<IBranchSeeder>();
+                await seeder.SeedAsync(5);
             }
         }
 

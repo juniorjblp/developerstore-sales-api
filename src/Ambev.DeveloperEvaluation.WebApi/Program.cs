@@ -72,6 +72,7 @@ public class Program
 
                 app.ExecuteMigrationIfEnabled();
                 await app.SeedProductIfEnabledAsync();
+                await app.SeedBranchIfEnabledAsync();
             }
 
             app.UseHttpsRedirection();
