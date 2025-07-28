@@ -19,5 +19,6 @@ public class CreateSaleResult
     public Guid CustomerId { get; set; }
     public string CustomerName { get; set; } = string.Empty;
     public List<CreateSaleItemResult> Items { get; set; } = [];
+    public decimal Discount { get; set; }
     public decimal Total { get; set; }
 }
