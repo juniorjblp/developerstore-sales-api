@@ -1,0 +1,26 @@
+﻿using AutoMapper;
+using Ambev.DeveloperEvaluation.Domain.Entities;
+using Ambev.DeveloperEvaluation.Application.Sales.Models;
+
+namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
+
+/// <summary>
+/// Profile for mapping between Sale entity and CreateSaleResponse
+/// </summary>
+public class CreateSaleProfile : Profile
+{
+    /// <summary>
+    /// Initializes the mappings for CreateSale operation
+    /// </summary>
+    public CreateSaleProfile()
+    {
+        CreateMap<CreateSaleCommand, Sale>();
+        CreateMap<SaleItemDto, SaleItem>();
+        CreateMap<SaleItem, CreateSaleItemResult>();
+        CreateMap<Sale, CreateSaleResult>()
+            .ForMember(dest => dest.SaleNumber, opt =>
+                opt.MapFrom(src => src.FormattedSaleNumber))
+            .ForMember(dest => dest.Total, opt =>
+                opt.MapFrom(src => src.TotalAmount));
+    }
+}
