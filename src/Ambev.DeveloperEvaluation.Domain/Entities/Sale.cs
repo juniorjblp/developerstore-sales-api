@@ -19,6 +19,8 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         private readonly List<SaleItem> _items = [];
         public IReadOnlyCollection<SaleItem> Items => _items.AsReadOnly();
 
+        public decimal TotalDiscount => _items.Sum(i => i.Discount);
+
         public decimal TotalAmount => _items.Sum(i => i.Total);
 
         [NotMapped]
