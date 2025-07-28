@@ -30,6 +30,18 @@ services:
       - "5432:5432"
     restart: unless-stopped
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    hostname: rabbitmq-host
+    ports:
+      - "5672:5672" 
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: developer
+      RABBITMQ_DEFAULT_PASS: ev@luAt10n
+    restart: unless-stopped
+
   # ambev.developerevaluation.nosql:
   #   container_name: ambev_developer_evaluation_nosql 
   #   image: mongo:8.0    

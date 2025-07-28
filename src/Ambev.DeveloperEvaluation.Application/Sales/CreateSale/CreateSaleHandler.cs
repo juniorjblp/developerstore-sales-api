@@ -4,13 +4,15 @@ using FluentValidation;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Common.Security;
+using Ambev.DeveloperEvaluation.Domain.Events;
+using Ambev.DeveloperEvaluation.Domain.EventPublishing;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 
 /// <summary>
 /// Handler for processing CreateSaleCommand requests
 /// </summary>
-public class CreateSaleHandler(ISaleRepository saleRepository, IBranchRepository branchRepository, IProductRepository productRepository, IUser user, IMapper mapper) : IRequestHandler<CreateSaleCommand, CreateSaleResult>
+public class CreateSaleHandler(ISaleRepository saleRepository, IBranchRepository branchRepository, IProductRepository productRepository, IUser user, IMapper mapper, IEventPublisher publisher) : IRequestHandler<CreateSaleCommand, CreateSaleResult>
 {
     /// <summary>
     /// Handles the CreateSaleCommand request
@@ -48,6 +50,9 @@ public class CreateSaleHandler(ISaleRepository saleRepository, IBranchRepository
         var sale = Sale.Create(userId, user.Username, branch, saleItems);
 
         var createdSale = await saleRepository.CreateAsync(sale, cancellationToken);
+
+        await publisher.PublishAsync(new SaleCreatedEvent(createdSale.Id, createdSale.CustomerId, createdSale.BranchId, createdSale.TotalAmount), createdSale.Id, $"Sale id:{createdSale.Id} created");
+
         var result = mapper.Map<CreateSaleResult>(createdSale);
         return result;
     }
