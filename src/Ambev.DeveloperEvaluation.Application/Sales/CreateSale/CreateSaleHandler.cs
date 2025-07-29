@@ -9,17 +9,8 @@ using Ambev.DeveloperEvaluation.Domain.EventPublishing;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 
-/// <summary>
-/// Handler for processing CreateSaleCommand requests
-/// </summary>
 public class CreateSaleHandler(ISaleRepository saleRepository, IBranchRepository branchRepository, IProductRepository productRepository, IUser user, IMapper mapper, IEventPublisher publisher) : IRequestHandler<CreateSaleCommand, CreateSaleResult>
 {
-    /// <summary>
-    /// Handles the CreateSaleCommand request
-    /// </summary>
-    /// <param name="command">The CreateSale command</param>
-    /// <param name="cancellationToken">Cancellation token</param>
-    /// <returns>The created Sale details</returns>
     public async Task<CreateSaleResult> Handle(CreateSaleCommand command, CancellationToken cancellationToken)
     {
         var validator = new CreateSaleCommandValidator();

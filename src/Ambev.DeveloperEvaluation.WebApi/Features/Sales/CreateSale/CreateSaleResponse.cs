@@ -2,9 +2,6 @@ using Ambev.DeveloperEvaluation.WebApi.Features.Sales.Models;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale;
 
-/// <summary>
-/// API response model for CreateSale operation
-/// </summary>
 public class CreateSaleResponse
 {
     public Guid Id { get; set; }
@@ -14,6 +11,6 @@ public class CreateSaleResponse
     public Guid CustomerId { get; set; }
     public string CustomerName { get; set; } = string.Empty;
     public List<CreateSaleItemResponse> Items { get; set; } = [];
-    public decimal TotalDiscount { get; set; }
+    public decimal Discount { get; set; }
     public decimal Total { get; set; }
 }
