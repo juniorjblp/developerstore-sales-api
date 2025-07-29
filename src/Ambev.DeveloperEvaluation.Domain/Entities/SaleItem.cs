@@ -1,4 +1,6 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Common;
+﻿using Ambev.DeveloperEvaluation.Common.Validation;
+using Ambev.DeveloperEvaluation.Domain.Common;
+using Ambev.DeveloperEvaluation.Domain.Validation;
 
 namespace Ambev.DeveloperEvaluation.Domain.Entities
 {
@@ -21,29 +23,30 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
 
         private SaleItem() { }
 
-        /// <summary>
-        /// Creates a SaleItem based on the selected product and quantity.
-        /// Applies business rules like discount tiers and validates the input.
-        /// </summary>
-        /// <param name="product">The product being sold. Must have a valid name and price.</param>
-        /// <param name="quantity">Number of units (allowed range: 1 to 20).</param>
-        /// <returns>A new SaleItem instance with discount applied if applicable.</returns>
-        /// <exception cref="DomainException">
-        /// Thrown when the product is invalid or the quantity is out of range.
-        /// </exception>
+        public ValidationResultDetail Validate()
+        {
+            var validator = new SaleItemValidator();
+            var result = validator.Validate(this);
+            return new ValidationResultDetail
+            {
+                IsValid = result.IsValid,
+                Errors = result.Errors.Select(o => (ValidationErrorDetail)o)
+            };
+        }
+
         public static SaleItem Create(Product product, int quantity)
         {
             if (product == null)
-                throw new DomainException("Produto não pode ser nulo.");
+                throw new DomainException("Product cannot be null.");
 
             if (string.IsNullOrWhiteSpace(product.Name))
-                throw new DomainException("Nome do produto é obrigatório.");
+                throw new DomainException("Product name is erquired.");
 
             if (quantity < 1)
-                throw new DomainException("A quantidade deve ser no mínimo 1.");
+                throw new DomainException("Quantity must be greather than 0.");
 
             if (quantity > MaxQuantity)
-                throw new DomainException($"Não é permitido vender mais de {MaxQuantity} unidades do mesmo produto.");
+                throw new DomainException($"Cannot sell more than {MaxQuantity} identical items.");
 
             var discount = CalculateDiscount(product.Price, quantity);
 
@@ -57,12 +60,6 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
             };
         }
 
-        /// <summary>
-        /// Applies business rules for quantity-based discounts:
-        /// - More than 10 units: 20% discount
-        /// - Between 4 and 9 units: 10% discount
-        /// - Less than 4 units: no discount
-        /// </summary>
         private static decimal CalculateDiscount(decimal unitPrice, int quantity)
         {
             if (quantity >= MidQuantityForDiscount)
