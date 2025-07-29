@@ -1,7 +1,7 @@
-﻿using Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale;
-using Ambev.DeveloperEvaluation.WebApi.Features.Sales.ModelValidators;
+﻿using Ambev.DeveloperEvaluation.WebApi.Features.Sales.ModelValidators;
 using FluentValidation;
 
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale;
 public class CreateSaleRequestValidator : AbstractValidator<CreateSaleRequest>
 {
     public CreateSaleRequestValidator()
@@ -9,8 +9,7 @@ public class CreateSaleRequestValidator : AbstractValidator<CreateSaleRequest>
         RuleFor(x => x.BranchId)
             .NotEmpty().WithMessage("Branch ID is required.");
         RuleFor(x => x.Items)
-            .NotNull().WithMessage("A lista de itens não pode ser nula.")
-            .NotEmpty().WithMessage("A venda deve conter pelo menos um item.");
+            .NotNull().NotEmpty().WithMessage("Item list cannot be null or empty");
 
         RuleForEach(x => x.Items).SetValidator(new CreateSaleItemRequestValidator());
     }

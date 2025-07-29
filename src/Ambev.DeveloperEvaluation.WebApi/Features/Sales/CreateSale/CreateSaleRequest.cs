@@ -2,12 +2,4 @@
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale;
 
-/// <summary>
-/// Represents a request to create a new sale in the system.
-/// </summary>
-public class CreateSaleRequest
-{
-    public Guid BranchId { get; set; }
-
-    public List<CreateSaleItemRequest> Items { get; set; } = [];
-}
+public record CreateSaleRequest(Guid BranchId, List<CreateSaleItemRequest> Items);
