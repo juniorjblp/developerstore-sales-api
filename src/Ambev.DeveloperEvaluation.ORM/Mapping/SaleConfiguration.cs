@@ -38,6 +38,14 @@ namespace Ambev.DeveloperEvaluation.ORM.Mapping
             builder.Property(s => s.BranchId)
                 .IsRequired();
 
+            builder.Property(s => s.IsDeleted)
+                .IsRequired()
+                .HasDefaultValue(false);
+
+            builder.Property(s => s.UpdatedAt)
+                .HasColumnType("timestamp with time zone")
+                .IsRequired(false);
+
             builder.HasOne(s => s.Branch)
                 .WithMany(b => b.Sales)
                 .HasForeignKey(s => s.BranchId)

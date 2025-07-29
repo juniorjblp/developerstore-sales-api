@@ -1,4 +1,6 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Common;
+﻿using Ambev.DeveloperEvaluation.Common.Validation;
+using Ambev.DeveloperEvaluation.Domain.Common;
+using Ambev.DeveloperEvaluation.Domain.Validation;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ambev.DeveloperEvaluation.Domain.Entities
@@ -16,6 +18,9 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         public Branch Branch { get; set; } = null!;
 
         public bool IsCancelled { get; private set; }
+        public bool IsDeleted { get; set; } = false;
+
+        public DateTime? UpdatedAt { get; set; }
 
         private readonly List<SaleItem> _items = new();
         public IReadOnlyCollection<SaleItem> Items => _items.AsReadOnly();
@@ -50,9 +55,27 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
             return sale;
         }
 
+        public ValidationResultDetail Validate()
+        {
+            var validator = new SaleValidator();
+            var result = validator.Validate(this);
+            return new ValidationResultDetail
+            {
+                IsValid = result.IsValid,
+                Errors = result.Errors.Select(o => (ValidationErrorDetail)o)
+            };
+        }
+
+        public void Delete()
+        {
+            IsDeleted = true;
+            UpdatedAt = DateTime.UtcNow;
+        }
+
         public void Cancel()
         {
             IsCancelled = true;
+            UpdatedAt = DateTime.UtcNow;
         }
     }
 }

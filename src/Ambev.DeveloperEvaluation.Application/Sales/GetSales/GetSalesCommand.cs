@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.GetSales
 {
-    public record GetSalesCommand(Guid CustomerId, DateTime StartDate, DateTime EndDate, int PageNumber, int PageSize) : IRequest<GetSalesResult> 
+    public record GetSalesCommand(Guid CustomerId, string StartDate, string EndDate, int PageNumber, int PageSize) : IRequest<GetSalesResult> 
     {
         public ValidationResultDetail Validate()
         {
