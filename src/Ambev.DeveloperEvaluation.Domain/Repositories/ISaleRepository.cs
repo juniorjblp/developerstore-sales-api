@@ -14,5 +14,6 @@ namespace Ambev.DeveloperEvaluation.Domain.Repositories
         /// <param name="cancellationToken">Cacellation token</param>
         /// <returns></returns>
         Task<Sale> CreateAsync(Sale sale, CancellationToken cancellationToken);
+        Task<List<Sale>> GetSalesAsync(Guid customerId, DateTime startDate, DateTime endDate, int pageNumber, int pageSize, CancellationToken cancellationToken);
     }
 }
