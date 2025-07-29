@@ -17,5 +17,13 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
                 .Where(p => ids.Contains(p.Id))
                 .ToListAsync();
         }
+
+        public async Task<List<Product>> GetProductsAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
+        {
+            return await context.Products
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync(cancellationToken);
+        }
     }
 }

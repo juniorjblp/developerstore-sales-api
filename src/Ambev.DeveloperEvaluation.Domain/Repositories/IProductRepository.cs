@@ -6,6 +6,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Repositories
     {
         Task<Product?> GetByIdAsync(Guid id);
         Task<List<Product>> GetByIdsAsync(IEnumerable<Guid> ids);
+        Task<List<Product>> GetProductsAsync(int pageNumber, int pageSize, CancellationToken cancellationToken);
     }
 
 }
