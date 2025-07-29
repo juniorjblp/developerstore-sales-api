@@ -1,7 +1,9 @@
-﻿using Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
+﻿using Ambev.DeveloperEvaluation.Application.Sales.CancelSale;
+using Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 using Ambev.DeveloperEvaluation.Application.Sales.DeleteSale;
 using Ambev.DeveloperEvaluation.Application.Sales.GetSales;
 using Ambev.DeveloperEvaluation.WebApi.Common;
+using Ambev.DeveloperEvaluation.WebApi.Features.Sales.CancelSale;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.DeleteSale;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.GetSales;
@@ -78,6 +80,24 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
                 Success = true,
                 Message = "Sale deleted successfully",
                 Data = mapper.Map<DeleteSaleResponse>(response)
+            });
+        }
+
+        [HttpPut]
+        [ProducesResponseType(typeof(ApiResponseWithData<CancelSaleResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        [Authorize]
+        public async Task<IActionResult> CancelSale([FromQuery] CancelSaleRequest request, CancellationToken cancellationToken)
+        {
+            var command = mapper.Map<CancelSaleCommand>(request);
+
+            var response = await mediator.Send(command, cancellationToken);
+
+            return Ok(new ApiResponseWithData<CancelSaleResponse>
+            {
+                Success = true,
+                Message = "Sale cancelled successfully",
+                Data = mapper.Map<CancelSaleResponse>(response)
             });
         }
     }
