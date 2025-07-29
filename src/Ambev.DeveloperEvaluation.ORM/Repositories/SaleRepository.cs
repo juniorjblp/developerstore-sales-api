@@ -16,12 +16,12 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
         public async Task<List<Sale>> GetSalesAsync(Guid customerId, DateTime startDate, DateTime endDate, int pageNumber, int pageSize, CancellationToken cancellationToken)
         {
             return await context.Sales
-                .Where(s => s.CustomerId == customerId && s.SaleDate >= startDate && s.SaleDate <= endDate)
+                .Where(s => s.CustomerId == customerId && s.SaleDate >= startDate && s.SaleDate <= endDate && s.IsDeleted == false)
                 .OrderByDescending(s => s.SaleDate)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
                 .Include(s => s.Branch)
                 .Include(s => s.Items)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync(cancellationToken);
         }
     }
