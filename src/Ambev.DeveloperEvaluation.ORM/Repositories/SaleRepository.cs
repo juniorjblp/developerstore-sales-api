@@ -13,6 +13,14 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
             return sale;
         }
 
+        public async Task<Sale?> GetSaleByIdAsync(Guid id)
+        {
+            return await context.Sales
+                .Include(s => s.Branch)
+                .Include(s => s.Items)
+                .FirstOrDefaultAsync(s => s.Id == id && s.IsDeleted == false);
+        }
+
         public async Task<List<Sale>> GetSalesAsync(Guid customerId, DateTime startDate, DateTime endDate, int pageNumber, int pageSize, CancellationToken cancellationToken)
         {
             return await context.Sales
@@ -23,6 +31,12 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync(cancellationToken);
+        }
+
+        public async Task UpdateSaleAsync(Sale sale, CancellationToken cancellationToken)
+        {
+            context.Sales.Update(sale);
+            await context.SaveChangesAsync(cancellationToken);
         }
     }
 }

@@ -1,29 +1,21 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
+using Ambev.DeveloperEvaluation.Application.Sales.DeleteSale;
 using Ambev.DeveloperEvaluation.Application.Sales.GetSales;
 using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale;
+using Ambev.DeveloperEvaluation.WebApi.Features.Sales.DeleteSale;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.GetSales;
 using AutoMapper;
-using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
 {
-    /// <summary>
-    /// Controller for managing sale operations
-    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class SalesController(IMediator mediator, IMapper mapper) : BaseController
     {
-        /// <summary>
-        /// Creates a new sale
-        /// </summary>
-        /// <param name="request">The sale creation request</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>The created sale details</returns>
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponseWithData<CreateSaleResponse>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
@@ -63,11 +55,29 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales
 
             var response = await mediator.Send(command, cancellationToken);
 
-            return Created(string.Empty, new ApiResponseWithData<GetSalesResponse>
+            return Ok(new ApiResponseWithData<GetSalesResponse>
             {
                 Success = true,
                 Message = "Sales retrieved successfully",
                 Data = mapper.Map<GetSalesResponse>(response)
+            });
+        }
+
+        [HttpDelete]
+        [ProducesResponseType(typeof(ApiResponseWithData<DeleteSaleResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        [Authorize]
+        public async Task<IActionResult> DeleteSale([FromQuery] DeleteSaleRequest request, CancellationToken cancellationToken)
+        {
+            var command = mapper.Map<DeleteSaleCommand>(request);
+
+            var response = await mediator.Send(command, cancellationToken);
+
+            return Ok(new ApiResponseWithData<DeleteSaleResponse>
+            {
+                Success = true,
+                Message = "Sale deleted successfully",
+                Data = mapper.Map<DeleteSaleResponse>(response)
             });
         }
     }
