@@ -2,10 +2,10 @@
 A RESTful API built with .NET 8, PostgreSQL and MediatR, following Clean Architecture, SOLID principles, and using Entity Framework Core. The API is designed for managing product sales, discounts, and customers, with features such as soft delete and event-driven architecture via RabbitMQ.
 
 ## Features
-- **Sales Management**: Create, Read, Update and Delete sales.
+- **Sales Management**: Create, Read, Update and Delete Sales.
 - **Customer Management**: Create, Read and Delete customers.
-- **Product Management**: read products.
-- **Branches Management**: Read branches.
+- **Product Management**: Read Products.
+- **Branches Management**: Read Branches.
 
 ## Technologies Used
 - .NET 8
