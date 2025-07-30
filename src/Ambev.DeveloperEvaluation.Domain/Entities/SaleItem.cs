@@ -11,7 +11,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         private const int MaxQuantity = 20;
 
         public Guid ProductId { get; private set; }
-        public string ProductName { get; private set; }
+        public string ProductName { get; private set; } = string.Empty;
         public int Quantity { get; private set; }
         public decimal UnitPrice { get; private set; }
         public decimal Discount { get; private set; }
