@@ -24,6 +24,61 @@ namespace Ambev.DeveloperEvaluation.WebApi.Middleware
             {
                 await HandleValidationExceptionAsync(context, ex);
             }
+            catch (NotFoundException) 
+            {
+                await HandleNotFoundExceptionExceptionAsync(context);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                await HandleUnauthorizedAccessExceptionExceptionAsync(context);
+            }
+            catch (Exception)
+            {
+                await HandleExceptionExceptionAsync(context);
+            }
+
+        }
+
+        private static Task HandleExceptionExceptionAsync(HttpContext context)
+        {
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+
+            var response = new ApiResponse
+            {
+                Success = false,
+                Message = "Internal Server Error"
+            };
+
+            return context.Response.WriteAsync(JsonSerializer.Serialize(response, JsonSerializerOptions.Default));
+        }
+
+        private static Task HandleNotFoundExceptionExceptionAsync(HttpContext context)
+        {
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+
+            var response = new ApiResponse
+            {
+                Success = false,
+                Message = "Not Found"
+            };
+
+            return context.Response.WriteAsync(JsonSerializer.Serialize(response, JsonSerializerOptions.Default));
+        }
+
+        private static Task HandleUnauthorizedAccessExceptionExceptionAsync(HttpContext context)
+        {
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+
+            var response = new ApiResponse
+            {
+                Success = false,
+                Message = "Wrong email or password"
+            };
+
+            return context.Response.WriteAsync(JsonSerializer.Serialize(response, JsonSerializerOptions.Default));
         }
 
         private static Task HandleValidationExceptionAsync(HttpContext context, ValidationException exception)
