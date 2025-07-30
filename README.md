@@ -3,7 +3,7 @@ A RESTful API built with .NET 8, PostgreSQL and MediatR, following Clean Archite
 
 ## Features
 - **Sales Management**: Create, Read, Update and Delete Sales.
-- **Customer Management**: Create, Read and Delete customers.
+- **Customer Management**: Create, Read and Delete Customers.
 - **Product Management**: Read Products.
 - **Branches Management**: Read Branches.
 
